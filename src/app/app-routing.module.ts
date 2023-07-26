@@ -14,6 +14,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'app-key',
+    loadChildren: () => import('./features/app-key/keys.module').then(m => m.KeysModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'customers',
     loadChildren: () => import('./features/customers/customers.module').then(m => m.CustomersModule),
     canActivate: [AuthGuard]
@@ -28,21 +33,21 @@ const appRoutes: Routes = [
     loadChildren: () => import('./features/account/account.module').then(m => m.AccountModule),
     canActivate: [AuthGuard]
   },
-  {
-    path: 'icons',
-    loadChildren: () => import('./features/icons/icons.module').then(m => m.IconsModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'typography',
-    loadChildren: () => import('./features/typography/typography.module').then(m => m.TypographyModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'about',
-    loadChildren: () => import('./features/about/about.module').then(m => m.AboutModule),
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'icons',
+  //   loadChildren: () => import('./features/icons/icons.module').then(m => m.IconsModule),
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: 'typography',
+  //   loadChildren: () => import('./features/typography/typography.module').then(m => m.TypographyModule),
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: 'about',
+  //   loadChildren: () => import('./features/about/about.module').then(m => m.AboutModule),
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: '**',
     redirectTo: 'dashboard',

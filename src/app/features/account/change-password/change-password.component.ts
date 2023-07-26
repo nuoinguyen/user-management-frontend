@@ -4,6 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SpinnerService } from 'src/app/core/services/spinner.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,7 +22,9 @@ export class ChangePasswordComponent implements OnInit {
   newPasswordConfirm!: string;
   disableSubmit!: boolean;
 
-  constructor(private authService: AuthenticationService,
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
     private logger: NGXLogger,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService) {
@@ -51,7 +54,7 @@ export class ChangePasswordComponent implements OnInit {
     });
   }
 
-  changePassword() {
+  async changePassword() {
 
     if (this.newPassword !== this.newPasswordConfirm) {
       this.notificationService.openSnackBar('New passwords do not match.');
@@ -60,16 +63,15 @@ export class ChangePasswordComponent implements OnInit {
 
     const email = this.authService.getCurrentUser().email;
 
-    this.authService.changePassword(email, this.currentPassword, this.newPassword)
-      .subscribe(
-        data => {
-          this.logger.info(`User ${email} changed password.`);
-          this.form.reset();
-          this.notificationService.openSnackBar('Your password has been changed.');
-        },
-        error => {
-          this.notificationService.openSnackBar(error.error);
-        }
-      );
+    let res = await this.authService.changePassword(email, this.currentPassword, this.newPassword);
+
+    if(res.statusCode === 200 || res.error !== undefined) {
+      this.logger.info(`User ${email} changed password.`);
+      this.form.reset();
+      this.notificationService.openSnackBar('Your password has been changed.');
+      this.router.navigate(['/auth/login']);
+    } else{
+      this.notificationService.openSnackBar(res.error.message);
+    }
   }
 }

@@ -1,0 +1,12 @@
+table {
+    width: 100%;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+.button-generate-key {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}

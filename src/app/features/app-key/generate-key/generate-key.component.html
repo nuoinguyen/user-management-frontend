@@ -1,0 +1,40 @@
+<div class="container login-container" fxLayout="row" fxLayoutAlign="center center">
+    <form [formGroup]="keyForm" fxFlex="30%" fxFlex.sm="50%" fxFlex.xs="90%">
+        <mat-card>
+            <mat-card-title>Generate APP Key</mat-card-title>
+            <mat-card-content>
+
+                <mat-form-field class="full-width">
+                    <input id="nameInput" matInput placeholder="Name Key" formControlName="name"
+                        autocomplete="firstName" type="text">
+
+                    <mat-error id="requiredFirstNameError" *ngIf="keyForm.controls['name'].hasError('required')">
+                        Name key is
+                        <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                 <mat-form-field class="full-width">
+                    <mat-label>Choose a platform...</mat-label>
+                    <mat-select formControlName="platform">
+                        <mat-option [value]="platforms" *ngFor="let platforms of Platforms">{{platforms}}</mat-option>
+                    </mat-select>
+                    <mat-error id="requiredFirstNameError" *ngIf="keyForm.controls['platform'].hasError('required')">
+                        Platforms key is
+                        <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+
+            </mat-card-content>
+
+            <mat-card-actions class="login-actions">
+                <button mat-raised-button id="login" color="primary" [disabled]="keyForm.invalid || loading"
+                    (click)="generate()">Generate app key</button>
+                <button mat-raised-button id="login" (click)="cancel()">Cancel</button>
+            </mat-card-actions>
+
+        </mat-card>
+
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    </form>
+</div>

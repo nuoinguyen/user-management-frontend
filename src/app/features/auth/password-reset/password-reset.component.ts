@@ -25,7 +25,7 @@ export class PasswordResetComponent implements OnInit {
     private notificationService: NotificationService,
     private titleService: Title) {
 
-    this.titleService.setTitle('angular-material-template - Password Reset');
+    this.titleService.setTitle('Password Reset');
     this.hideNewPassword = true;
     this.hideNewPasswordConfirm = true;
   }
@@ -46,7 +46,7 @@ export class PasswordResetComponent implements OnInit {
     });
   }
 
-  resetPassword() {
+  async resetPassword() {
 
     const password = this.form.get('newPassword')?.value;
     const passwordConfirm = this.form.get('newPasswordConfirm')?.value;
@@ -57,18 +57,14 @@ export class PasswordResetComponent implements OnInit {
     }
 
     this.loading = true;
-
-    this.authService.passwordReset(this.email, this.token, password, passwordConfirm)
-      .subscribe(
-        () => {
-          this.notificationService.openSnackBar('Your password has been changed.');
-          this.router.navigate(['/auth/login']);
-        },
-        (error: any) => {
-          this.notificationService.openSnackBar(error.error);
-          this.loading = false;
-        }
-      );
+    let res = await this.authService.passwordReset(this.email, this.token, password, passwordConfirm)
+    if (res.statusCode === 200) {
+      this.notificationService.openSnackBar('Your password has been changed.');
+      this.router.navigate(['/auth/login']);
+    } else {
+      this.loading = false;
+      this.notificationService.openSnackBar(res.error.message);
+    }
   }
 
   cancel() {
